@@ -13,7 +13,7 @@ Thank you for your interest in contributing to our project! We appreciate your e
 
 ## Code of Conduct
 
-Please familiarize yourself with our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing. We expect all contributors to adhere to the guidelines outlined there to foster a welcoming and inclusive community.
+Please familiarize yourself with our [Code of Conduct](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/.github/CODE_OF_CONDUCT/CODE_OF_CONDUCT.md) before contributing. We expect all contributors to adhere to the guidelines outlined there to foster a welcoming and inclusive community.
 
 ## How to Contribute
 
@@ -55,7 +55,7 @@ Please familiarize yourself with our [Code of Conduct](CODE_OF_CONDUCT.md) befor
 
 If you have any questions or need further assistance, you can reach out to us via:
 
-- Email: [example@example.com](mailto:example@example.com)
-- Issue Tracker: [GitHub Issues](https://github.com/organization/project/issues)
+- Email: [example@example.com](mailto:muradmustafayev03@gmail.com)
+- Issue Tracker: [GitHub Issues](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/.github/ISSUE_TEMPLATE/)
 
 We value your contributions and appreciate your efforts to improve our project. Happy contributing!

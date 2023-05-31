@@ -57,12 +57,9 @@ symasym.c is located. The file names will be based on the provided name prefix,
 line orientation, line symmetry, and seed value.
 
 ![Horizontal asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
-
-![Horizontal asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
-
-![Horizontal asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
-
-![Horizontal asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
+![Horizontal symmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_hs1684187644522845.bmp)
+![Vertical asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
+![Vertical symmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/example_ha1684187644525988.bmp)
 
 ## Conclusion
 The symasym.c program allows you to generate bitmap images with symmetric

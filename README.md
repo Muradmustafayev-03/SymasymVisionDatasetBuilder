@@ -59,6 +59,8 @@ line orientation, line symmetry, and seed value.
 ![Horizontal asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/examples/example_ha1684187644525988.bmp)
 ![Horizontal symmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/examples/example_hs1684187644522845.bmp)
 ![Vertical symmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/examples/example_vs1684187644519671.bmp)
+
+
 ![Vertical asymmetric image](https://github.com/Muradmustafayev-03/SymasymVisionDatasetBuilder/blob/main/examples/example_va1684187673783142.bmp)
 
 ## Conclusion

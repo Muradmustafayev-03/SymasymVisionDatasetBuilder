@@ -129,32 +129,8 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
   // generating a random coordinate for the starting point
   int startPoint = (int) (LINE_THICKNESS / 2) + rand() % (size - LINE_THICKNESS);
   
-  if (isHorizontal == 1) { // vertical line
-    x = startPoint; y = 0; // initial position
-    yMotion = 1;  // motion in y direction is uniform
-    for (int i = 0; i < nIter; i++) {
-        // x is the central coordinate of the line is of specified thickness
-        int xInit = x - (int) (LINE_THICKNESS / 2);
-        int xFin = xInit + LINE_THICKNESS;
-        for (int xCurrent = xInit; xCurrent < xFin; xCurrent++) {
-            // painting the pixel to black
-            canvas[y][xCurrent][0] = 0;
-            canvas[y][xCurrent][1] = 0;
-            canvas[y][xCurrent][2] = 0;
-
-            // painting the symmetrical pixel
-            if (isSymmetric) {
-                canvas[size-y-1][xCurrent][0] = 0;
-                canvas[size-y-1][xCurrent][1] = 0;
-                canvas[size-y-1][xCurrent][2] = 0;
-            }
-        }
-        xMotion = rand() % (2 * LINE_THICKNESS + 1) - LINE_THICKNESS;
-        if (x + xMotion <= 0 || x + xMotion >= size-1) xMotion *= -1; // inverting the direction to stay inside
-        x += xMotion; y += yMotion;  // updating coordinates         
-    }
-  } else {
-    x = 0; y = startPoint;  // initial position
+  if (isHorizontal == 1) { // horizontal line
+    x = 0; y = startPoint; // initial position
     xMotion = 1;  // motion in x direction is uniform
     for (int i = 0; i < nIter; i++) {
         // y is the central coordinate of the line is of specified thickness
@@ -162,19 +138,43 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
         int yFin = yInit + LINE_THICKNESS;
         for (int yCurrent = yInit; yCurrent < yFin; yCurrent++) {
             // painting the pixel to black
-            canvas[yCurrent][x][0] = 0;
-            canvas[yCurrent][x][1] = 0;
-            canvas[yCurrent][x][2] = 0;
+            canvas[x][yCurrent][0] = 0;
+            canvas[x][yCurrent][1] = 0;
+            canvas[x][yCurrent][2] = 0;
 
             // painting the symmetrical pixel
             if (isSymmetric) {
-                canvas[yCurrent][size-x-1][0] = 0;
-                canvas[yCurrent][size-x-1][1] = 0;
-                canvas[yCurrent][size-x-1][2] = 0;
+                canvas[size-x-1][yCurrent][0] = 0;
+                canvas[size-x-1][yCurrent][1] = 0;
+                canvas[size-x-1][yCurrent][2] = 0;
             }
         }
         yMotion = rand() % (2 * LINE_THICKNESS + 1) - LINE_THICKNESS;
         if (y + yMotion <= 0 || y + yMotion >= size-1) yMotion *= -1; // inverting the direction to stay inside
+        x += xMotion; y += yMotion;  // updating coordinates         
+    }
+  } else { // vertical line
+    x = startPoint; y = 0;  // initial position
+    yMotion = 1;  // motion in y direction is uniform
+    for (int i = 0; i < nIter; i++) {
+        // x is the central coordinate of the line is of specified thickness
+        int xInit = x - (int) (LINE_THICKNESS / 2);
+        int xFin = xInit + LINE_THICKNESS;
+        for (int xCurrent = xInit; xCurrent < xFin; xCurrent++) {
+            // painting the pixel to black
+            canvas[xCurrent][y][0] = 0;
+            canvas[xCurrent][y][1] = 0;
+            canvas[xCurrent][y][2] = 0;
+
+            // painting the symmetrical pixel
+            if (isSymmetric) {
+                canvas[xCurrent][size-y-1][0] = 0;
+                canvas[xCurrent][size-y-1][1] = 0;
+                canvas[xCurrent][size-y-1][2] = 0;
+            }
+        }
+        xMotion = rand() % (2 * LINE_THICKNESS + 1) - LINE_THICKNESS;
+        if (x + xMotion <= 0 || x + xMotion >= size-1) xMotion *= -1; // inverting the direction to stay inside
         x += xMotion; y += yMotion;  // updating coordinates         
     }
   }

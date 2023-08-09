@@ -135,7 +135,7 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
     for (int i = 0; i < nIter; i++) {
         // x is the central coordinate of the line is of specified thickness
         int xInit = x - (int) (LINE_THICKNESS / 2);
-        int xFin = x + (int) (LINE_THICKNESS / 2) + LINE_THICKNESS % 2;
+        int xFin = xInit + LINE_THICKNESS;
         for (int xCurrent = xInit; xCurrent < xFin; xCurrent++) {
             // painting the pixel to black
             canvas[y][xCurrent][0] = 0;
@@ -153,14 +153,13 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
         if (x + xMotion <= 0 || x + xMotion >= size-1) xMotion *= -1; // inverting the direction to stay inside
         x += xMotion; y += yMotion;  // updating coordinates         
     }
-  }
-  else {
+  } else {
     x = 0; y = startPoint;  // initial position
     xMotion = 1;  // motion in x direction is uniform
     for (int i = 0; i < nIter; i++) {
         // y is the central coordinate of the line is of specified thickness
         int yInit = y - (int) (LINE_THICKNESS / 2);
-        int yFin = y + (int) (LINE_THICKNESS / 2) + LINE_THICKNESS % 2;
+        int yFin = yInit + LINE_THICKNESS;
         for (int yCurrent = yInit; yCurrent < yFin; yCurrent++) {
             // painting the pixel to black
             canvas[yCurrent][x][0] = 0;

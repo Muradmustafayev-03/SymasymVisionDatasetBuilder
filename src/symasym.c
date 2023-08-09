@@ -6,18 +6,29 @@
 
 #define LINE_THICKNESS 3
 
+// structure for representing a pixel
+typedef struct {
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+} Pixel;
+
+// constants for white and black pixels
+const Pixel WHITE_PIXEL = {255, 255, 255};
+const Pixel BLACK_PIXEL = {0, 0, 0};
+
 void createImage(long long seed, int isHorizontal, int isSymmetric, char* namePreffix, int size);
-void createCanvas(int size, unsigned char canvas[][size][3]);
-void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int isSymmetric);
+void createCanvas(int size, Pixel canvas[][size]);
+void drawLine(int size, Pixel canvas[][size], int isHorizontal, int isSymmetric);
 void createBitmapHeaders(FILE *file, int size);
 
 int main(int argc, char *argv[]) {
-  // declaring file-wise parameters
+  // declare file-wise parameters
   long long nSeed = -1;
   int fIsHorizontal = -1;
   int fIsSymmetric = -1;
 
-  // declaring batch-wise parameters
+  // declare batch-wise parameters
   int nImageSize = 32;
   int nNumberOfFiles = 1;
   char sFileName[64] = {};
@@ -40,19 +51,19 @@ int main(int argc, char *argv[]) {
 }
 
 void createImage(long long seed, int isHorizontal, int isSymmetric, char* namePreffix, int size) {
-  // setting default seed
+  // set default seed
   if (seed == -1) {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    // getting number of microseconds since January 1, 1970
+    // get number of microseconds since January 1, 1970
     seed = (long long)tv.tv_sec * 1000000LL + (long long)tv.tv_usec;
   }
 
-  // setting default flags for orientation and symmetry
+  // set default flags for orientation and symmetry
   if (isHorizontal == -1) isHorizontal = (seed % 4 < 2) ? 1 : 0;
   if (isSymmetric == -1) isSymmetric = seed % 2;
 
-  // generating filename
+  // generate filename
   char name[64] = {};
   strcpy(name, namePreffix);
   if (isHorizontal == 1) strcat(name, "h");
@@ -64,10 +75,10 @@ void createImage(long long seed, int isHorizontal, int isSymmetric, char* namePr
   strcat(name, str);
   strcat(name, ".bmp");
 
-  srand(seed); // setting seed to the random function
-  uint8_t image[size][size][3]; // Creating a bits matrix
-  createCanvas(size, image); // getting an empty canvas to draw the line
-  drawLine(size, image, isHorizontal, isSymmetric); // drawing the line
+  srand(seed); // set seed to the random function
+  Pixel image[size][size]; // create a bits matrix
+  createCanvas(size, image); // get an empty canvas to draw the line
+  drawLine(size, image, isHorizontal, isSymmetric); // draw the line
 
   FILE *file = fopen(name, "wb");
   if (file == NULL) {
@@ -75,50 +86,36 @@ void createImage(long long seed, int isHorizontal, int isSymmetric, char* namePr
   }
   createBitmapHeaders(file, size);
 
-  // Write image data to file
+  // write image data to file
   for (int j = 0; j < size; j++) {
     for (int i = 0; i < size; i++) {
-      fwrite(&image[i][j][2], sizeof(uint8_t), 1, file);  // B
-      fwrite(&image[i][j][1], sizeof(uint8_t), 1, file);  // G
-      fwrite(&image[i][j][0], sizeof(uint8_t), 1, file);  // R
+      fwrite(&image[i][j].blue, sizeof(uint8_t), 1, file);  // B
+      fwrite(&image[i][j].green, sizeof(uint8_t), 1, file);  // G
+      fwrite(&image[i][j].red, sizeof(uint8_t), 1, file);  // R
     }
   }
   fclose(file);
 }
 
-void createCanvas(int size, unsigned char canvas[][size][3]) {
-  // Filling canvas with white
-  for (int i = 0; i < size; i++) {
-    for (int j = 0; j < size; j++) {
-      canvas[i][j][0] = 255;  // R
-      canvas[i][j][1] = 255;  // G
-      canvas[i][j][2] = 255;  // B
+void createCanvas(int size, Pixel canvas[][size]) {
+    // fill canvas with white pixels
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            canvas[i][j] = WHITE_PIXEL;
+        }
     }
-  }
-
-  // Drawing the black frame with vertical and horizontal lines of width 1
-  for (int i = 0; i < size; i++) {
-    canvas[i][0][0] = 0;  // R
-    canvas[i][0][1] = 0;  // G
-    canvas[i][0][2] = 0;  // B
-
-    canvas[i][size - 1][0] = 0;  // R
-    canvas[i][size - 1][1] = 0;  // G
-    canvas[i][size - 1][2] = 0;  // B
-  }
-
-  for (int j = 0; j < size; j++) {
-    canvas[0][j][0] = 0;  // R
-    canvas[0][j][1] = 0;  // G
-    canvas[0][j][2] = 0;  // B
-
-    canvas[size - 1][j][0] = 0;  // R
-    canvas[size - 1][j][1] = 0;  // G
-    canvas[size - 1][j][2] = 0;  // B
-  }
+    // draw the black frame with horizontal and vertical lines of width 1
+    for (int i = 0; i < size; i++) {
+        canvas[i][0] = BLACK_PIXEL;
+        canvas[i][size - 1] = BLACK_PIXEL;
+    }
+    for (int j = 0; j < size; j++) {
+        canvas[0][j] = BLACK_PIXEL;
+        canvas[size - 1][j] = BLACK_PIXEL;
+    }
 }
 
-void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int isSymmetric) {
+void drawLine(int size, Pixel canvas[][size], int isHorizontal, int isSymmetric){
   // declaring variables for coordinates, motion in corresponding directions, and number of iterations
   int x; int y; int xMotion; int yMotion; int nIter;
 
@@ -137,17 +134,8 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
         int yInit = y - (int) (LINE_THICKNESS / 2);
         int yFin = yInit + LINE_THICKNESS;
         for (int yCurrent = yInit; yCurrent < yFin; yCurrent++) {
-            // painting the pixel to black
-            canvas[x][yCurrent][0] = 0;
-            canvas[x][yCurrent][1] = 0;
-            canvas[x][yCurrent][2] = 0;
-
-            // painting the symmetrical pixel
-            if (isSymmetric) {
-                canvas[size-x-1][yCurrent][0] = 0;
-                canvas[size-x-1][yCurrent][1] = 0;
-                canvas[size-x-1][yCurrent][2] = 0;
-            }
+            canvas[x][yCurrent] = BLACK_PIXEL; // painting the pixel to black
+            if (isSymmetric) { canvas[size-x-1][yCurrent] = BLACK_PIXEL; } // painting the symmetrical pixel
         }
         yMotion = rand() % (2 * LINE_THICKNESS + 1) - LINE_THICKNESS;
         if (y + yMotion <= 0 || y + yMotion >= size-1) yMotion *= -1; // inverting the direction to stay inside
@@ -162,16 +150,8 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
         int xFin = xInit + LINE_THICKNESS;
         for (int xCurrent = xInit; xCurrent < xFin; xCurrent++) {
             // painting the pixel to black
-            canvas[xCurrent][y][0] = 0;
-            canvas[xCurrent][y][1] = 0;
-            canvas[xCurrent][y][2] = 0;
-
-            // painting the symmetrical pixel
-            if (isSymmetric) {
-                canvas[xCurrent][size-y-1][0] = 0;
-                canvas[xCurrent][size-y-1][1] = 0;
-                canvas[xCurrent][size-y-1][2] = 0;
-            }
+            canvas[xCurrent][y] = BLACK_PIXEL;  // painting the pixel to black
+            if (isSymmetric) { canvas[xCurrent][size-y-1] = BLACK_PIXEL; } // painting the symmetrical pixel
         }
         xMotion = rand() % (2 * LINE_THICKNESS + 1) - LINE_THICKNESS;
         if (x + xMotion <= 0 || x + xMotion >= size-1) xMotion *= -1; // inverting the direction to stay inside
@@ -181,14 +161,14 @@ void drawLine(int size, unsigned char canvas[][size][3], int isHorizontal, int i
 }
 
 void createBitmapHeaders(FILE *file, int size) {
-  // File header (14 bytes)
+  // file header (14 bytes)
   uint16_t bfType = 0x4D42;  // "BM"
   uint32_t bfSize = 54 + 3 * size * size;  // Total file size
   uint16_t bfReserved1 = 0;
   uint16_t bfReserved2 = 0;
   uint32_t bfOffBits = 54;  // Offset to image data
 
-  // Info header (40 bytes)
+  // info header (40 bytes)
   uint32_t biSize = 40;  // Size of BITMAPINFOHEADER structure
   int32_t biWidth = size;
   int32_t biHeight = size;   // Negative height for top-down image
